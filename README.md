@@ -1,6 +1,6 @@
 # hindsight-skills
 
-AI coding agent skills for [Hindsight](https://hindsight.dev) — long-term memory for AI agents.
+AI coding agent skills for [Hindsight](https://github.com/vectorize-io/hindsight) — long-term memory for AI agents.
 
 Works with **Claude Code**, **Codex**, **Gemini CLI**, **Cursor**, **Kiro**, and **Factory Droid**.
 
@@ -190,10 +190,10 @@ cd ~/hindsight-skills && git pull && ./setup --host auto
 ## Requirements
 
 - An AI coding agent: [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex](https://openai.com/index/codex/), [Gemini CLI](https://github.com/google-gemini/gemini-cli), [Cursor](https://cursor.com), [Kiro](https://kiro.dev), or [Factory Droid](https://factory.ai)
-- A [Hindsight](https://hindsight.dev) account — sign up at [ui.hindsight.vectorize.io](https://ui.hindsight.vectorize.io)
+- A [Hindsight](https://github.com/vectorize-io/hindsight) account — sign up at [ui.hindsight.vectorize.io](https://ui.hindsight.vectorize.io)
 
 ## License
 
 MIT. Free and open source.
 
-[hindsight.dev](https://hindsight.dev) · [Documentation](https://docs.hindsight.dev) · [GitHub](https://github.com/vectorize-io/hindsight)
+[Documentation](https://hindsight.vectorize.io) · [GitHub](https://github.com/vectorize-io/hindsight) · [Sign up](https://ui.hindsight.vectorize.io)

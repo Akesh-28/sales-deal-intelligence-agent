@@ -48,4 +48,4 @@ The Go client uses `NullableString`, `NullableTime`, and similar types for optio
 For detailed examples of all operations, see:
 - [Python SDK documentation](./python.md) - API concepts are the same
 - [Node.js SDK documentation](./nodejs.md) - API concepts are the same
-- [OpenAPI specification](https://hindsight.dev/openapi.json) - Complete API reference
+- [OpenAPI specification](https://hindsight.vectorize.io/openapi.json) - Complete API reference
