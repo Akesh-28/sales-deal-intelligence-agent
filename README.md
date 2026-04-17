@@ -13,48 +13,85 @@ These skills give your coding agent deep expertise in Hindsight's architecture, 
 ```
 You:    /hindsight-architect
 
-Claude: [detects your Next.js + Python codebase, finds no existing Hindsight config]
-        What does your application do, and who uses it?
+Claude: [reads README, package.json, scans directory structure, checks for LLM usage]
 
-You:    It's a customer support agent for our SaaS platform. Each customer
-        has multiple users who open tickets. The agent needs to remember
-        past interactions so it doesn't ask the same questions twice.
+        I've looked at your project. It's a Next.js + Python customer support
+        platform with OpenAI calls in the ticket handler and no existing
+        Hindsight config.
 
-Claude: I see three memory opportunities:
-        1. Per-user conversation history — remember what each user has told you
-        2. Per-customer product knowledge — learn how each customer uses your platform
-        3. Cross-customer issue patterns — detect recurring problems across your base
+        How do you want to approach adding memory?
+        > A) Find opportunities for me
+          B) I already know what I want
+          C) Chat about it
 
-        Should we design for all three, or start with a subset?
+You:    A
 
-You:    All three. We're on Hindsight Cloud.
+Claude: [examines handlers, routes, LLM calls, data flows]
 
-Claude: [asks about recall optimization: balanced, completeness, or cost]
-        [asks about enterprise requirements: PII, compliance, security]
+        Here's how memory would work in this application:
 
-Claude: Here's your memory architecture:
+        Memory flow: Retain full ticket conversations per-user, recall past
+        context before each agent response, and synthesize patterns over time.
 
-        # Memory Implementation Plan: support-agent
+        Integration points:
+        - api/chat.py:42 — add retain after each conversation turn
+        - api/chat.py:18 — add recall before the LLM call
+        - lib/agent.ts:31 — inject mental model content into system prompt
+
+        What this enables: The agent remembers every user's history, learns
+        each customer's product setup, and detects recurring issues across
+        your entire base.
+
+        Is this the direction you want, or would you adjust the scope?
+
+You:    This is right. Let's do all of it.
+
+Claude: Are there any of these considerations for your solution?
+        > [ ] Enterprise security
+          [ ] Data privacy / PII
+          [ ] Regulatory compliance
+          [x] None of these
+
+Claude: [presents the three architecture decisions with reasoning]
+        1. What to retain — full conversations, upsert on session_id
+        2. Tag schema — userId:{id}, customerId:{id}
+        3. Mental models — per-user preferences, per-customer usage, cross-customer issues
+
+        Does this design work?
+
+You:    Yes.
+
+Claude: [asks about deployment: Cloud, Local, or Self-hosted]
+        [asks about recall optimization: Balanced, Completeness, Cost, or Custom]
+
+Claude: # Memory Implementation Plan: support-agent
         ## Bank Configuration — single bank, per-user tag isolation
         ## Tag Schema — userId:{id}, customerId:{id}
         ## Retain Strategy — full conversation upsert with document_id
         ## Recall Strategy — 10K token budget, any_strict tag matching
-        ## Mental Models — 3 models with auto-refresh:
-           - Per-user preferences (communication style, expertise level)
-           - Per-customer product usage (features, configuration, pain points)
-           - Cross-customer issue tracker (recurring problems, unresolved bugs)
+        ## Mental Models — 3 models with auto-refresh
         ## Client Setup — Python SDK with environment variables
         ## Implementation Checklist — 9 steps, executable in order
+
+        Ready to implement this plan?
+        > A) Yes, implement it
+          B) Not now
+
+You:    A
+
+Claude: [installs SDK, adds env vars, wires up retain/recall, creates mental
+        models, runs test scenario — committing as it goes]
 ```
 
-Six questions. One implementation plan. Working code for your stack.
+A guided conversation. One implementation plan. Then it builds it for you.
 
 ## Skills
 
 | Skill | What it does |
 |-------|-------------|
-| `/hindsight-architect` | Memory architecture design. Understands your application, identifies where memory adds value, and produces a complete implementation plan — bank config, tag schema, retain/recall patterns, mental models, and working code. |
+| `/hindsight-architect` | Memory architecture design. Understands your application, identifies where memory adds value, produces a complete implementation plan, and optionally implements it — bank config, tag schema, retain/recall patterns, mental models, and working code. |
 | `/hindsight-docs` | Full Hindsight reference. API operations, SDK guides, configuration, deployment, cookbook recipes. Your agent searches these docs to answer specific questions or debug your integration. |
+| `/hindsight-upgrade` | Version check and upgrade. Detects when a newer version of hindsight-skills is available and offers to install it. Runs automatically in the background; can also be invoked directly. |
 
 ## Install
 
@@ -145,7 +182,7 @@ cd ~/hindsight-skills && ./setup        # or --host codex, --host auto, etc.
 
 **Slash commands don't autocomplete?** Skills must be at `~/.claude/skills/{name}/SKILL.md` (Claude Code), `~/.codex/skills/{name}/SKILL.md` (Codex/Gemini/Cursor), `~/.kiro/skills/{name}/SKILL.md` (Kiro), or `~/.factory/skills/{name}/SKILL.md` (Factory Droid). The setup script handles this — run it again if something got out of sync.
 
-**Want to update?**
+**Want to update?** The `/hindsight-upgrade` skill checks automatically. To force-check or upgrade manually:
 ```bash
 cd ~/hindsight-skills && git pull && ./setup --host auto
 ```
