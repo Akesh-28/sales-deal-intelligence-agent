@@ -190,7 +190,9 @@ cd ~/hindsight-skills && git pull && ./setup --host auto
 ## Requirements
 
 - An AI coding agent: [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex](https://openai.com/index/codex/), [Gemini CLI](https://github.com/google-gemini/gemini-cli), [Cursor](https://cursor.com), [Kiro](https://kiro.dev), or [Factory Droid](https://factory.ai)
-- A [Hindsight](https://github.com/vectorize-io/hindsight) account — sign up at [ui.hindsight.vectorize.io](https://ui.hindsight.vectorize.io)
+- Either:
+  - A [Hindsight Cloud](https://ui.hindsight.vectorize.io) account — sign up at [ui.hindsight.vectorize.io](https://ui.hindsight.vectorize.io)
+  - A [Hindsight](https://github.com/vectorize-io/hindsight) self-hosted instance. 
 
 ## License
 
