@@ -12,11 +12,14 @@ Run the core pipeline directly via PowerShell to see episodic memory extraction 
 Plaintext
 PS C:\Users\akesh\hindsight-skills> .\.venv\Scripts\python.exe agent.py
 
-==== PROCESSING TRANSACTION PIPELINE FOR: TECHCORP SOLUTIONS ====
+=== PROCESSING TRANSACTION PIPELINE FOR: TECHCORP SOLUTIONS ====
+
 🧠 [Hindsight] Scanning episodic memory bank for historic records regarding 'TechCorp Solutions'...
 🔀 [cascadeflow] Standard interaction update. Routing to fast baseline tier.
 📊 [Telemetry Audit Trail] Model Used: llama-3.1-8b-instant | Latency: 0.91s
+
 ==========================================================================
+
 **Account Status Update:**
 
 Based on our historical conversation, the account is currently stalled due to two key concerns:
@@ -30,6 +33,7 @@ Subject: A Fresh Perspective on Integration and Pricing...
 🧠 [Hindsight] Scanning episodic memory bank for historic records regarding 'TechCorp Solutions'...
 🔀 [cascadeflow] Complex strategic objection detected. Escalating to high-tier engine.
 📊 [Telemetry Audit Trail] Model Used: llama-3.3-70b-versatile | Latency: 2.54s
+
 ==========================================================================
 
 Subject: Personalized Solution to Address Integration and Pricing Concerns
