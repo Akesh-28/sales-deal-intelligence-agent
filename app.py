@@ -1,14 +1,17 @@
 import os
 import time
+from typing import Optional
 from fastapi import Depends, FastAPI, HTTPException, Security, status
 from fastapi.security import APIKeyHeader
 from pydantic import BaseModel
 from groq import Groq
 
-# Import core architectural primitives directly from agent.py
+# Core architectural primitives imported from local agent module
 from agent import HindsightMemoryEngine, CascadeFlowGateway
 
-# 1. API Routing Configuration Setup
+# =====================================================================
+# 1. API CONFIGURATION & CORE INITIALIZATION
+# =====================================================================
 app = FastAPI(
     title="Enterprise Deal Intelligence Engine",
     description="Production-grade CRM memory and routing runtime API.",
@@ -19,13 +22,31 @@ GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 if not GROQ_API_KEY:
     raise ValueError("CRITICAL: Environment variable GROQ_API_KEY is unconfigured.")
 
+# Initialize the Groq SDK client
 client = Groq(api_key=GROQ_API_KEY)
 
-# 2. Enterprise Security Token Infrastructure
+# Instantiate long-lived engines as global instances
+memory_engine = HindsightMemoryEngine()
+routing_gateway = CascadeFlowGateway()
+
+
+# =====================================================================
+# 2. SECURITY & AUTHENTICATION MIDDLEWARE
+# =====================================================================
 API_KEY_NAME = "X-API-KEY"
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=True)
 
-def validate_auth_token(api_key: str = Security(api_key_header)):
+def validate_auth_token(api_key: str = Security(api_key_header)) -> str:
+    """
+    Validates incoming API requests against a static enterprise token.
+    
+    Args:
+        api_key (str): Extracted token from the request header.
+        
+    Raises:
+        HTTPException: 403 Forbidden error if token is missing or invalid.
+    """
+    # Note: In production, swap this for an env variable or dynamic vault lookup
     if api_key != "secret_sales_token_2026":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, 
@@ -33,38 +54,61 @@ def validate_auth_token(api_key: str = Security(api_key_header)):
         )
     return api_key
 
-# 3. Data Presentation Layer Models (Schemas)
+
+# =====================================================================
+# 3. DATA PERSISTENCE LAYER (SCHEMAS)
+# =====================================================================
 class AnalysisRequest(BaseModel):
+    """Payload schema for client inbound interaction analyses."""
     prospect_name: str
     incoming_interaction: str
 
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "prospect_name": "Acme Corp",
+                "incoming_interaction": "Can we review the pricing model for the enterprise subscription?"
+            }
+        }
+
+
 class AnalysisResponse(BaseModel):
+    """Standardized response schema returned to the client gateway."""
     prospect_name: str
     intent_detected: str
     model_allocated: str
     latency_seconds: float
     generated_output: str
 
-# 4. Global Middleware Initializations
-memory_engine = HindsightMemoryEngine()
-routing_gateway = CascadeFlowGateway()
 
-# 5. Production Transaction Router Endpoint
-@app.post("/api/v1/deal-intelligence", response_model=AnalysisResponse, status_code=200)
+# =====================================================================
+# 4. TRANSACTION ENGINE ROUTER (ENDPOINTS)
+# =====================================================================
+@app.post(
+    "/api/v1/deal-intelligence", 
+    response_model=AnalysisResponse, 
+    status_code=status.HTTP_200_OK,
+    summary="Process customer intent with context-aware routing."
+)
 async def process_deal_transaction(
     payload: AnalysisRequest, 
     auth: str = Depends(validate_auth_token)
 ):
+    """
+    Processes client interactions by pulling conversation history,
+    dynamically routing the request to an optimal LLM hardware path,
+    and handling automated model failovers if network faults occur.
+    """
     start_time = time.time()
     
-    # Step A: Asynchronous isolated context tracking execution (Hindsight)
+    # Step A: Asynchronously fetch historical timeline context
     historical_memory = await memory_engine.recall_isolated_context(payload.prospect_name)
     
-    # Step B: Automated semantic evaluation execution (cascadeflow)
+    # Step B: Compute intent tier and dynamically select LLM target route
     computed_intent = await routing_gateway.analyze_intent_complexity(payload.incoming_interaction)
     target_model = routing_gateway.select_hardware_route(computed_intent)
     
-    # Step C: Composing production isolation execution boundaries
+    # Step C: Compose instructions and isolate background data
     system_instructions = (
         "You are an Elite Enterprise Sales Agent Core Operations Unit.\n"
         "Analyze the historical context and draft an immediate response matrix address.\n"
@@ -78,7 +122,7 @@ async def process_deal_transaction(
     )
     
     try:
-        # Step D: Execute Network Inference Loop over cloud framework clusters
+        # Step D: Primary API Call Loop Execution
         completion = client.chat.completions.create(
             messages=[
                 {"role": "system", "content": system_instructions},
@@ -92,7 +136,7 @@ async def process_deal_transaction(
         latency = time.time() - start_time
         generated_text = completion.choices[0].message.content or ""
         
-        print(f"📊 [Telemetry System Audit] Complete. Target: {target_model} | Runtime: {latency:.2f}s")
+        print(f"📊 [Telemetry Audit] Success | Route: {target_model} | Latency: {latency:.2f}s")
         
         return AnalysisResponse(
             prospect_name=payload.prospect_name,
@@ -103,20 +147,24 @@ async def process_deal_transaction(
         )
         
     except Exception as network_error:
-        print(f"❌ [API Failover System] Error detected over target array: {str(network_error)}")
-        
-        # Step E: Immediate automatic failover fallback path execution
+        # Step E: Secondary Failover Intercept Routing Path
+        print(f"❌ [API Failover System] Error over target cluster: {str(network_error)}")
         backup_model = "llama-3.1-8b-instant"
-        print(f"🔄 [cascadeflow Intercept] Redirecting current thread payload to safe-mode core: {backup_model}")
+        print(f"🔄 [CascadeFlow Intercept] Redirecting current payload to backup array: {backup_model}")
         
-        completion = client.chat.completions.create(
-            messages=[{"role": "user", "content": combined_user_payload}],
-            model=backup_model,
-            stream=False
-        )
+        try:
+            completion = client.chat.completions.create(
+                messages=[{"role": "user", "content": combined_user_payload}],
+                model=backup_model,
+                stream=False
+            )
+            fallback_text = completion.choices[0].message.content or ""
+        except Exception as critical_err:
+            raise HTTPException(
+                status_code=status.HTTP_502_BAD_GATEWAY,
+                detail=f"Critical system blackout. LLM clusters unreachable: {str(critical_err)}"
+            )
 
-        fallback_text = completion.choices[0].message.content or ""
-        
         return AnalysisResponse(
             prospect_name=payload.prospect_name,
             intent_detected="emergency_failover",
