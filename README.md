@@ -1,5 +1,5 @@
-Enterprise Sales Deal Intelligence Agent
-An autonomous CRM routing intelligence pipeline built for the Hindsight x cascadeflow Hackathon.
+**Enterprise Sales Deal Intelligence Agent
+An autonomous CRM routing intelligence pipeline built for the Hindsight x cascadeflow Hackathon.**
 
 Works natively with Groq LPUs, Python Virtual Environments, and Windows PowerShell.
 
@@ -18,6 +18,7 @@ PS C:\Users\akesh\hindsight-skills> .\.venv\Scripts\python.exe agent.py
 📊 [Telemetry Audit Trail] Model Used: llama-3.1-8b-instant | Latency: 0.91s
 ==========================================================================
 **Account Status Update:**
+
 Based on our historical conversation, the account is currently stalled due to two key concerns:
 1. Integration Bandwidth (as mentioned on 2026-06-25)
 2. Pricing Concerns (as mentioned on 2026-06-30)
@@ -30,6 +31,7 @@ Subject: A Fresh Perspective on Integration and Pricing...
 🔀 [cascadeflow] Complex strategic objection detected. Escalating to high-tier engine.
 📊 [Telemetry Audit Trail] Model Used: llama-3.3-70b-versatile | Latency: 2.54s
 ==========================================================================
+
 Subject: Personalized Solution to Address Integration and Pricing Concerns
 
 Dear TechCorp Solutions Team,
