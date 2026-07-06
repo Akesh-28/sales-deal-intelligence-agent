@@ -1,0 +1,14 @@
+[
+  {
+    "session_id": "call_1",
+    "date": "2026-06-25",
+    "prospect": "TechCorp Solutions",
+    "transcript": "We are interested in your software, but our current engineering team is completely swamped. We don't have bandwidth for a heavy 3-month integration phase right now."
+  },
+  {
+    "session_id": "email_2",
+    "date": "2026-06-30",
+    "prospect": "TechCorp Solutions",
+    "transcript": "Thanks for the email. Another issue has come up: your competitor is offering a flat flat-rate pricing tier, and we are quite worried about hidden volume-based costs if we scale with you."
+  }
+]
