@@ -1,16 +1,15 @@
-# Enterprise Sales Deal Intelligence Agent
-
+Enterprise Sales Deal Intelligence Agent
 An autonomous CRM routing intelligence pipeline built for the Hindsight x cascadeflow Hackathon.
 
-Works natively with **Groq LPUs**, **Python Virtual Environments**, and **Windows PowerShell**.
+Works natively with Groq LPUs, Python Virtual Environments, and Windows PowerShell.
 
-Most sales tools treat every incoming email or call transcript like a first date—they completely forget historical context between sessions. This agent fixes that. By implementing simulation layers for **Hindsight** episodic memory and **cascadeflow** budget-routing, this agent tracks long-term customer friction points and dynamically optimizes API infrastructure expenses on the fly.
+Most sales tools treat every incoming email or call transcript like a first date—they completely forget historical context between sessions. This agent fixes that. By implementing simulation layers for Hindsight episodic memory and cascadeflow budget-routing, this agent tracks long-term customer friction points and dynamically optimizes API infrastructure expenses on the fly.
 
----
+⚡ See It Work
+1. CLI Local Execution
+Run the core pipeline directly via PowerShell to see episodic memory extraction and dynamic model orchestration in action.
 
-## ⚡ See It Work
-
-```text
+Plaintext
 PS C:\Users\akesh\hindsight-skills> .\.venv\Scripts\python.exe agent.py
 
 ==== PROCESSING TRANSACTION PIPELINE FOR: TECHCORP SOLUTIONS ====
@@ -35,3 +34,24 @@ Subject: Personalized Solution to Address Integration and Pricing Concerns
 
 Dear TechCorp Solutions Team,
 As we previously discussed on 2026-06-25, I understand your engineering team is currently overwhelmed with a heavy 3-month integration phase...
+2. Live API Server Initialization
+The pipeline is fully wrapped as a high-performance REST API using FastAPI. You can spin up the development server with hot-reloading enabled. 
+Refer to the terminal trace below to see the Uvicorn server initialization lifecycle, dependency activations, and real-time transaction logging inside the VS Code Terminal environment.
+
+![VS Code Terminal Server Logs](teminal.png)
+
+3. Interactive API Sandbox (Swagger UI)
+Once the server is running, navigate to the auto-generated documentation backend to test payloads interactively.
+
+Below is a visual inspection of a `POST` request execution trace within the interactive sandbox. The example demonstrates how a strategic pricing query from a prospect (`Acme Corp`) automatically triggers an intent escalation, provisions the `llama-3.3-70b-versatile` engine, and streams back a contextualized executive sales response.
+
+![Swagger UI API Test Response](swagger_ui2.png)
+
+🚀 Production Scaling Roadmap (Next Steps)
+If deployed into a live enterprise CRM environment, the system is engineered to scale via the following blueprint:
+
+Neural Knowledge Graphs: Transitioning the flat JSON memory ledger into a managed vector cluster (pgvector/Qdrant) combined with Neo4j for automated relation and entity extraction.
+
+Semantic Router Arrays: Upgrading basic keyword checks to ultra-fast, 10ms embedding-based vector similarity clustering to analyze complex intent nuances.
+
+Event-Driven Workflows: Utilizing Celery and Redis message queues to offload heavy model reasoning tasks from the primary HTTP thread footprint, ensuring sub-second API responsiveness.
